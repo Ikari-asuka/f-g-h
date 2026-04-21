@@ -1,0 +1,2 @@
+# f-g-h
+.DS_Store .idea/ .vercel  # Environment files (secrets) - Bun loads .env.* files natively .env .env.* !.env.example  # ctags tags  node_modules dev dist dist-env tsconfig.tsbuildinfo .manicode __mock-projects__ npm-app/src/__tests__/data/ .aider* .codebuff* **.log  debug/  # Nx cache directories .nx/cache .nx/workspace-data
