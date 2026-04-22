@@ -1,0 +1,32 @@
+import random
+
+def guess_number_game():
+    print("=" * 30)
+    print("    欢迎来到猜数字小游戏")
+    print("=" * 30)
+    print("规则：我已经想好了 1~100 之间的一个数字")
+    print("请你猜一猜是多少，我会告诉你大了还是小了\n")
+
+    # 随机生成一个1到100的数字
+    target = random.randint(1, 100)
+    count = 0
+
+    while True:
+        try:
+            guess = int(input("请输入你猜的数字："))
+            count += 1
+
+            if guess > target:
+                print("太大了，再小一点～")
+            elif guess < target:
+                print("太小了，再大一点～")
+            else:
+                print(f"\n恭喜你猜对了！答案就是 {target}")
+                print(f"你一共猜了 {count} 次")
+                break
+        except ValueError:
+            print("请输入有效的整数！")
+
+if __name__ == "__main__":
+    guess_number_game()
+    input("\n按回车键退出...")
