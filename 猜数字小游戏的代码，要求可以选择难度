@@ -1,0 +1,78 @@
+import random
+
+def play_game():
+    print("=" * 40)
+    print("      猜数字小游戏（带难度选择）")
+    print("=" * 40)
+    
+    # 1. 选择难度
+    print("\n请选择难度：")
+    print("1 - 简单 (1~50，无限次机会)")
+    print("2 - 普通 (1~100，10次机会)")
+    print("3 - 困难 (1~200，7次机会)")
+    
+    # 处理难度输入
+    while True:
+        difficulty = input("请输入难度编号(1/2/3)：")
+        if difficulty in ["1", "2", "3"]:
+            break
+        print("输入错误！请输入 1、2 或 3")
+    
+    # 2. 根据难度设置参数
+    if difficulty == "1":
+        max_num = 50
+        max_guess = 0  # 0代表无限次
+        print(f"\n简单模式：数字范围 1 ~ {max_num}，无限次机会！")
+    elif difficulty == "2":
+        max_num = 100
+        max_guess = 10
+        print(f"\n普通模式：数字范围 1 ~ {max_num}，你有 {max_guess} 次机会！")
+    else:
+        max_num = 200
+        max_guess = 7
+        print(f"\n困难模式：数字范围 1 ~ {max_num}，你只有 {max_guess} 次机会！")
+
+    # 3. 生成随机答案
+    target = random.randint(1, max_num)
+    count = 0
+
+    # 4. 开始猜数字
+    while True:
+        # 剩余次数提示
+        if max_guess > 0:
+            left = max_guess - count
+            print(f"\n剩余次数：{left} 次")
+        
+        # 输入数字
+        try:
+            guess = int(input("请输入你猜的数字："))
+            count += 1
+        except ValueError:
+            print("❌ 请输入有效的整数！")
+            continue
+
+        # 判断大小
+        if guess > target:
+            print("⬇️ 太大了，再小一点！")
+        elif guess < target:
+            print("⬆️ 太小了，再大一点！")
+        else:
+            # 猜对了
+            print(f"\n🎉 恭喜你猜对了！答案就是 {target}")
+            print(f"🎯 总共用了 {count} 次")
+            break
+
+        # 次数用完（非简单模式）
+        if max_guess > 0 and count >= max_guess:
+            print(f"\n💀 次数用完啦！游戏结束")
+            print(f"正确答案是：{target}")
+            break
+
+# 主程序：可以重复玩
+while True:
+    play_game()
+    # 询问是否再来一局
+    again = input("\n再来一局吗？(y/n)：")
+    if again.lower() != "y":
+        print("\n👋 感谢游玩，再见！")
+        break
