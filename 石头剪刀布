@@ -1,0 +1,2 @@
+import random
+choice = ["石头","剪刀","布"]
