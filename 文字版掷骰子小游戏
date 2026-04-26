@@ -1,0 +1,35 @@
+import random
+
+def roll_dice():
+    print("====== 文字版掷骰子 ======")
+    while True:
+        # 玩家掷骰子
+        input("\n按下回车键掷骰子...")
+        player = random.randint(1, 6)
+        print(f"🎲 你的骰子点数：{player}")
+
+        # 电脑掷骰子
+        computer = random.randint(1, 6)
+        print(f"🎲 电脑骰子点数：{computer}")
+
+        # 判断胜负
+        if player > computer:
+            print("🎉 你赢了！")
+        elif player < computer:
+            print("😥 你输了！")
+        else:
+            print("🤝 平局！")
+
+        # 是否继续
+        while True:
+            choice = input("\n是否再来一局？(y/n)：")
+            if choice in ["y", "n", "Y", "N"]:
+                break
+            print("输入错误，请输入 y 或 n")
+            
+        if choice.lower() == "n":
+            print("\n👋 游戏结束，拜拜！")
+            break
+
+if __name__ == "__main__":
+    roll_dice()
