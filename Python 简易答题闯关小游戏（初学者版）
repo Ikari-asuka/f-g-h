@@ -1,0 +1,49 @@
+def start_game():
+    # 题库：题目 + 正确答案
+    questions = [
+        {"q": "Python中输出语句用什么？\nA.print  B.input", "ans": "A"},
+        {"q": "10 // 3 的结果是？\nA.3  B.4", "ans": "A"},
+        {"q": "哪个是循环关键字？\nA.if  B.for", "ans": "B"},
+        {"q": "Python是什么类型语言？\nA.编译型  B.解释型", "ans": "B"},
+        {"q": "3 * 5 等于多少？\nA.15  B.8", "ans": "A"}
+    ]
+
+    score = 0
+    total = len(questions)
+
+    print("===== 简易答题闯关 =====")
+    print("请输入选项 A 或 B 答题\n")
+
+    # 遍历每一题
+    for q in questions:
+        print(q["q"])
+        while True:
+            user_ans = input("你的答案：").strip().upper()
+            if user_ans in ["A", "B"]:
+                break
+            print("输入错误！只能输入 A 或 B\n")
+
+        # 判断对错
+        if user_ans == q["ans"]:
+            print("✅ 回答正确！+1分")
+            score += 1
+        else:
+            print(f"❌ 回答错误，正确答案是：{q['ans']}")
+        print("-" * 30)
+
+    # 闯关结束统计
+    print(f"\n答题结束！总分：{score}/{total}")
+    if score == total:
+        print("🎉 满分学霸！闯关成功")
+    elif score >= 3:
+        print("👍 不错哦，顺利通关")
+    else:
+        print("😥 继续加油，再试一次吧")
+
+# 主程序，可重复游玩
+while True:
+    start_game()
+    again = input("\n是否再来一局？(y/n)：").lower()
+    if again != "y":
+        print("👋 游戏结束，再见！")
+        break
