@@ -1,0 +1,72 @@
+def show_intro():
+    print("=" * 40)
+    print("        文字冒险：密室逃生")
+    print("=" * 40)
+    print("你醒来发现自己被困在一间神秘小屋。")
+    print("你需要寻找道具、做出选择，成功逃出房间！")
+    print("输入数字 1 或 2 进行选择\n")
+
+# 主游戏函数
+def adventure_game():
+    show_intro()
+    has_key = False   # 是否捡到钥匙
+    has_torch = False # 是否捡到火把
+
+    # 第一场景：大厅
+    print("【场景：大厅】")
+    print("1. 往左走 进入储物间")
+    print("2. 往右走 走到大门处")
+
+    while True:
+        choice1 = input("请选择你的行动(1/2)：")
+        if choice1 in ["1", "2"]:
+            break
+        print("输入无效，请输入 1 或 2！\n")
+
+    if choice1 == "1":
+        # 进入储物间
+        print("\n你走进昏暗的储物间...")
+        print("1. 翻看木箱")
+        print("2. 直接返回大厅")
+        while True:
+            c = input("选择(1/2)：")
+            if c in ["1","2"]:
+                break
+        if c == "1":
+            print("你在木箱里找到了一把【钥匙】和一支【火把】！")
+            has_key = True
+            has_torch = True
+        else:
+            print("你什么都没找到，回到了大厅。")
+
+    # 去大门场景
+    print("\n【场景：神秘大门】")
+    if not has_key:
+        print("大门紧锁，没有钥匙打不开，游戏失败...")
+        return
+    else:
+        print("你拿出钥匙准备开门。")
+        print("门外漆黑一片，要不要直接出去？")
+        print("1. 直接出门")
+        print("2. 先点燃火把再出门")
+
+        while True:
+            c2 = input("选择(1/2)：")
+            if c2 in ["1","2"]:
+                break
+        if c2 == "1":
+            print("\n外面太黑，你迷路了，被困荒野，结局：失败")
+        else:
+            if has_torch:
+                print("\n你点燃火把，照亮前路，顺利逃出小屋！")
+                print("🎉 恭喜你，完美通关！")
+            else:
+                print("你没有火把，出去还是一片漆黑，闯关失败！")
+
+# 循环游玩
+while True:
+    adventure_game()
+    again = input("\n是否再玩一次冒险？(y/n)：")
+    if again.lower() != "y":
+        print("👋 游戏结束，再见！")
+        break
