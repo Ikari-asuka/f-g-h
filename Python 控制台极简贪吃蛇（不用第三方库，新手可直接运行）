@@ -1,0 +1,102 @@
+import random
+import time
+import os
+
+# 清空控制台
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+# 方向常量
+UP = 0
+RIGHT = 1
+DOWN = 2
+LEFT = 3
+
+# 游戏设置
+WIDTH = 20
+HEIGHT = 10
+
+# 初始化蛇、食物、方向
+snake = [(5, 5)]
+food = (random.randint(1, WIDTH-2), random.randint(1, HEIGHT-2))
+dir = RIGHT
+
+# 画地图
+def draw():
+    clear_screen()
+    for y in range(HEIGHT):
+        row = ""
+        for x in range(WIDTH):
+            if (x, y) in snake:
+                row += "■"
+            elif (x, y) == food:
+                row += "●"
+            elif y == 0 or y == HEIGHT-1 or x == 0 or x == WIDTH-1:
+                row += "#"
+            else:
+                row += " "
+        print(row)
+
+# 主游戏
+def main():
+    global dir, food
+    print("贪吃蛇游戏")
+    print("控制规则：")
+    print("w 上  s 下  a 左  d 右")
+    time.sleep(2)
+
+    while True:
+        draw()
+        time.sleep(0.3)
+
+        # 蛇头
+        head_x, head_y = snake[0]
+
+        # 移动
+        if dir == UP:
+            new_head = (head_x, head_y - 1)
+        elif dir == DOWN:
+            new_head = (head_x, head_y + 1)
+        elif dir == LEFT:
+            new_head = (head_x - 1, head_y)
+        else:
+            new_head = (head_x + 1, head_y)
+
+        # 撞墙判断
+        if new_head[0] <= 0 or new_head[0] >= WIDTH-1 or new_head[1] <= 0 or new_head[1] >= HEIGHT-1:
+            print("撞墙了！游戏结束")
+            break
+
+        # 撞到自己
+        if new_head in snake:
+            print("撞到自己！游戏结束")
+            break
+
+        # 加入新蛇头
+        snake.insert(0, new_head)
+
+        # 吃到食物
+        if new_head == food:
+            # 重新生成食物
+            while True:
+                new_food = (random.randint(1, WIDTH-2), random.randint(1, HEIGHT-2))
+                if new_food not in snake:
+                    food = new_food
+                    break
+        else:
+            # 没吃到就去掉尾巴
+            snake.pop()
+
+        # 按键控制方向
+        key = input("输入 w/a/s/d 控制，回车继续：")
+        if key == "w" and dir != DOWN:
+            dir = UP
+        elif key == "s" and dir != UP:
+            dir = DOWN
+        elif key == "a" and dir != RIGHT:
+            dir = LEFT
+        elif key == "d" and dir != LEFT:
+            dir = RIGHT
+
+if __name__ == "__main__":
+    main()
