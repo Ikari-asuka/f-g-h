@@ -1,0 +1,91 @@
+import random
+import os
+
+# 清屏
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+# 初始化卡牌
+def init_card():
+    # 8对卡牌符号
+    cards = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H']
+    # 打乱顺序
+    random.shuffle(cards)
+    return cards
+
+# 打印翻牌面板
+def show_board(cards, reveal):
+    print("===== 翻牌记忆游戏 =====")
+    print("输入编号 1~16 翻牌，找出相同卡牌配对")
+    print("-" * 25)
+    idx = 0
+    for i in range(4):
+        row = ""
+        for j in range(4):
+            pos = idx + 1
+            if reveal[idx]:
+                row += f" {cards[idx]}  "
+            else:
+                row += f"{pos:2d}  "
+            idx += 1
+        print(row)
+    print("-" * 25)
+
+def memory_game():
+    cards = init_card()
+    # 标记是否翻开
+    reveal = [False] * 16
+    matched = 0
+
+    while matched < 8:
+        clear_screen()
+        show_board(cards, reveal)
+
+        # 选第一张牌
+        while True:
+            try:
+                p1 = int(input("请输入第一张牌编号(1-16)："))
+                if 1 <= p1 <= 16 and not reveal[p1-1]:
+                    break
+                print("输入无效或卡牌已翻开，请重新输入！")
+            except ValueError:
+                print("请输入数字！")
+        
+        idx1 = p1 - 1
+        reveal[idx1] = True
+        clear_screen()
+        show_board(cards, reveal)
+
+        # 选第二张牌
+        while True:
+            try:
+                p2 = int(input("请输入第二张牌编号(1-16)："))
+                if 1 <= p2 <= 16 and p2 != p1 and not reveal[p2-1]:
+                    break
+                print("输入无效、不能选同一张或已翻开的牌！")
+            except ValueError:
+                print("请输入数字！")
+        
+        idx2 = p2 - 1
+        reveal[idx2] = True
+        clear_screen()
+        show_board(cards, reveal)
+
+        # 判断是否配对成功
+        if cards[idx1] == cards[idx2]:
+            print("✅ 配对成功！")
+            matched += 1
+        else:
+            print("❌ 不匹配，卡牌翻面盖住...")
+            # 没配对就盖回去
+            reveal[idx1] = False
+            reveal[idx2] = False
+        
+        input("\n按回车继续...")
+
+    clear_screen()
+    print("🎉 恭喜！所有卡牌配对完成，游戏通关！")
+
+# 开始游戏
+if __name__ == "__main__":
+    memory_game()
