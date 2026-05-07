@@ -1,0 +1,129 @@
+import random
+
+# 初始化4*4棋盘
+def init_board():
+    board = [[0]*4 for _ in range(4)]
+    # 初始随机生成两个数字
+    add_new_num(board)
+    add_new_num(board)
+    return board
+
+# 随机在空格加 2 或 4
+def add_new_num(board):
+    empty = [(i,j) for i in range(4) for j in range(4) if board[i][j] == 0]
+    if empty:
+        i,j = random.choice(empty)
+        board[i][j] = 2 if random.random() < 0.8 else 4
+
+# 向左移动并合并
+def move_left(row):
+    # 去掉0
+    new_row = [x for x in row if x != 0]
+    # 合并相邻相同
+    for i in range(len(new_row)-1):
+        if new_row[i] == new_row[i+1]:
+            new_row[i] *= 2
+            new_row[i+1] = 0
+    # 再次去掉0
+    new_row = [x for x in new_row if x != 0]
+    # 补0到4位
+    while len(new_row) < 4:
+        new_row.append(0)
+    return new_row
+
+# 矩阵转置、翻转 实现上下右移动
+def transpose(board):
+    return [list(col) for col in zip(*board)]
+
+def reverse(board):
+    return [row[::-1] for row in board]
+
+# 移动控制
+def move(board, dire):
+    if dire == 'a':   # 左
+        for i in range(4):
+            board[i] = move_left(board[i])
+    elif dire == 'd': # 右
+        for i in range(4):
+            board[i] = move_left(board[i][::-1])[::-1]
+    elif dire == 'w': # 上
+        board = transpose(board)
+        for i in range(4):
+            board[i] = move_left(board[i])
+        board = transpose(board)
+    elif dire == 's': # 下
+        board = transpose(board)
+        for i in range(4):
+            board[i] = move_left(board[i][::-1])[::-1]
+        board = transpose(board)
+    return board
+
+# 判断游戏是否胜利
+def is_win(board):
+    for row in board:
+        if 2048 in row:
+            return True
+    return False
+
+# 判断是否还能移动
+def can_move(board):
+    # 有空格就能动
+    for row in board:
+        if 0 in row:
+            return True
+    # 相邻有相同可合并
+    for i in range(4):
+        for j in range(4):
+            if j+1 < 4 and board[i][j] == board[i][j+1]:
+                return True
+            if i+1 < 4 and board[i][j] == board[i+1][j]:
+                return True
+    return False
+
+# 打印棋盘
+def print_board(board):
+    print("-" * 30)
+    for row in board:
+        line = ""
+        for num in row:
+            if num == 0:
+                line += "    □"
+            else:
+                line += f"{num:5d}"
+        print(line)
+    print("-" * 30)
+
+def main():
+    print("==== 控制台极简2048 ====")
+    print("操作：W 上  S 下  A 左  D 右")
+    print("目标：合成 2048 获胜\n")
+    board = init_board()
+
+    while True:
+        print_board(board)
+        
+        # 胜利判断
+        if is_win(board):
+            print("🎉 恭喜！合成2048，游戏胜利！")
+            break
+        # 无法移动游戏结束
+        if not can_move(board):
+            print("💥 棋盘已满，无法移动，游戏结束！")
+            break
+
+        # 输入方向
+        key = input("请输入方向(w/a/s/d)：").lower()
+        if key not in ['w','a','s','d']:
+            print("输入无效！只能输入 w/a/s/d")
+            continue
+        
+        # 移动前备份
+        old_board = [row.copy() for row in board]
+        board = move(board, key)
+
+        # 有移动才生成新数字
+        if old_board != board:
+            add_new_num(board)
+
+if __name__ == "__main__":
+    main()
