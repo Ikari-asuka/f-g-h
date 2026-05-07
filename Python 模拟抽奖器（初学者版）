@@ -1,0 +1,50 @@
+import random
+
+def lottery_draw():
+    print("====== 模拟抽奖器 ======")
+    # 参与抽奖名单
+    name_list = ["张三","李四","王五","赵六","钱七","孙八","周九","吴十"]
+    # 备份原始名单
+    origin_list = name_list.copy()
+
+    while True:
+        print("\n当前参与人员：")
+        for name in name_list:
+            print(name, end="  ")
+        print("\n")
+
+        # 输入要抽几个人
+        try:
+            num = int(input("请输入本次抽取人数："))
+        except ValueError:
+            print("请输入合法数字！")
+            continue
+
+        if num <= 0 or num > len(name_list):
+            print(f"人数超出范围！只能抽 1~{len(name_list)} 人")
+            continue
+
+        # 随机抽奖，不重复
+        lucky = random.sample(name_list, num)
+        print("\n🎉 恭喜中奖人员：")
+        for p in lucky:
+            print("👉", p)
+
+        # 中奖人员从名单移除，下次不会再中
+        for p in lucky:
+            name_list.remove(p)
+
+        # 是否重置名单
+        choice = input("\n是否重置所有名单重新抽奖？(y/n)：")
+        if choice.lower() == "y":
+            name_list = origin_list.copy()
+            print("已重置抽奖名单！")
+
+        # 是否退出
+        exit_choice = input("是否退出抽奖？(y/n)：")
+        if exit_choice.lower() == "y":
+            print("抽奖结束！")
+            break
+
+if __name__ == "__main__":
+    lottery_draw()
